@@ -67,17 +67,17 @@ $('button').click(function(){
             success: function(data){
 
                 // Conditions actuelles avec image
-                $('.todaysWeather').append('<p>'+data.current_condition['condition']+'<img src='+data.current_condition["icon"]+'></img></p>');
+                $('.todaysWeather').append('<p>'+ escapeHtml(data.current_condition['condition'])+'<img src='+ escapeHtml(data.current_condition["icon"])+'></img></p>');
                 // Lever et coucher de soleil
-                $('.todaysWeather').append('<p>Lever du soleil : '+ data.city_info['sunrise']+' / Coucher de soleil : '+ data.city_info['sunset'] +'</p>');
+                $('.todaysWeather').append('<p>Lever du soleil : '+ escapeHtml(data.city_info['sunrise'])+' / Coucher de soleil : '+ escapeHtml(data.city_info['sunset']) +'</p>');
                 // Température
-                $('.todaysWeather').append('<p>Température : ' + data.current_condition['tmp'] + '°C</p>');
+                $('.todaysWeather').append('<p>Température : ' + escapeHtml(data.current_condition['tmp'].toString())+ '°C</p>');
                 // Humidité
-                $('.todaysWeather').append('<p>Humidité : '+ data.current_condition['humidity'] + ' %</p>');
+                $('.todaysWeather').append('<p>Humidité : '+ escapeHtml(data.current_condition['humidity'].toString()) + ' %</p>');
                 // Vent et direction
-                $('.todaysWeather').append('<p>Vent : ' + data.current_condition['wnd_spd'] + ' km/h, direction ' + data.current_condition['wnd_dir'] + '</p>');
+                $('.todaysWeather').append('<p>Vent : ' + escapeHtml(data.current_condition['wnd_spd'].toString()) + ' km/h, direction ' + escapeHtml(data.current_condition['wnd_dir']) + '</p>');
                 // Pression barométrique
-                $('.todaysWeather').append('<p>Pression barométrique : ' + data.current_condition['pressure'] + ' hPa</p>');
+                $('.todaysWeather').append('<p>Pression barométrique : ' + escapeHtml(data.current_condition['pressure'].toString()) + ' hPa</p>');
 
                 // Prévisions des prochains jours
                 $('.todaysWeather').after('<div class="forecast"></div>');
@@ -87,11 +87,11 @@ $('button').click(function(){
                     // Création d'une div parent
                     $('.forecast').append('<div class="day'+(i+1)+'"></div>');
                     // Date
-                    $('.day'+(i+1)).append('<h3>' + data["fcst_day_"+(i+1)]['day_long'] + ' ' + data["fcst_day_"+(i+1)]['date'] + '</h3>');
+                    $('.day'+(i+1)).append('<h3>' + escapeHtml(data["fcst_day_"+(i+1)]['day_long'].toString()) + ' ' + escapeHtml(data["fcst_day_"+(i+1)]['date'].toString()) + '</h3>');
                     // Conditions prévisionnelles avec image
-                    $('.day'+(i+1)).append('<p>'+ data["fcst_day_"+(i+1)]['condition'] + '<img src='+data["fcst_day_"+(i+1)]["icon"]+'></img></p>');
+                    $('.day'+(i+1)).append('<p>'+ escapeHtml(data["fcst_day_"+(i+1)]['condition'].toString()) + '<img src='+ escapeHtml(data["fcst_day_"+(i+1)]["icon"].toString())+'></img></p>');
                     // Températures minimum et maximum
-                    $('.day'+(i+1)).append('<p>Températures : de '+ data["fcst_day_"+(i+1)]['tmin'] + '°C à '+data["fcst_day_"+(i+1)]['tmax']+'°C</p>');
+                    $('.day'+(i+1)).append('<p>Températures : de '+ escapeHtml(data["fcst_day_"+(i+1)]['tmin'].toString()) + '°C à '+ escapeHtml(data["fcst_day_"+(i+1)]['tmax'].toString())+'°C</p>');
                 }
 
                 $('.forecast').children().css({
@@ -109,5 +109,3 @@ $('button').click(function(){
     navigator.geolocation.getCurrentPosition(success, error, options);
 
 });
-
-img

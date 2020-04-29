@@ -10,8 +10,26 @@ function removeOverlay(){
     $('.overlay').remove();
 }
 
+// Fonction permettant d'échapper le HTML
+function escapeHtml(text) {
+    var map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+
 // Si le bouton est cliqué
 $('button').click(function(){
+
+    // Supprimer les messages déjà chargés
+    $('.todaysWeather').remove();
+    $('.forecast').remove();
 
     // Options de la geolocalisation
     let options = {
@@ -23,13 +41,13 @@ $('button').click(function(){
     // Fonction qui sera appelée si la localisation n'a pas pu être récupérée (e.code contient le code de l'erreur)
     let error = function(e){
         if(e.code == e.TIMEOUT){
-            alert('Temps expiré')
+            $('button').after('<p class="red">Temps expiré</p>');
         } else if(e.code == e.PERMISSION_DENIED){
-            alert('Vous avez refusé le geolocalisation');
+            $('button').after('<p class="red">Vous avez refusé le geolocalisation</p>');
         } else if(e.code == e.POSITION_UNAVAILABLE){
-            alert('Localisation impossible');
+            $('button').after('<p class="red">Localisation impossible</p>');
         } else {
-            alert('Problème inconnu');
+            $('button').after('<p class="red">Problème inconnu</p>');
         }
     }
 
@@ -81,6 +99,8 @@ $('button').click(function(){
                     'padding': '20px',
                     'width': '100%'
                 });
+            }, error : function(){
+                $('button').after('<p class="red">Erreur lors de la récupération des données</p>');
             }
         });
     }

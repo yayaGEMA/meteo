@@ -41,20 +41,46 @@ $('button').click(function(){
 
         $('button').after('<div class="todaysWeather"></div>')
         $('.todaysWeather').prepend('<h2>Météo actuelle à votre position :</h2>');
-        
+
         $.ajax({
             type: 'GET',
-            url: 'http://www.prevision-meteo.ch/services/json/lat='+latitude+'lng='+longitude,
+            url: 'https://www.prevision-meteo.ch/services/json/lat='+latitude+'lng='+longitude,
             dataType:'json',
-            data: 'city_info',
-            success: function(p){
+            success: function(data){
 
                 // Conditions actuelles avec image
-                $('.todaysWeather').append('<p>'+p.current_condition['condition']+'<img src='+p.current_condition["icon"]+'></img></p>');
+                $('.todaysWeather').append('<p>'+data.current_condition['condition']+'<img src='+data.current_condition["icon"]+'></img></p>');
                 // Lever et coucher de soleil
-                $('.todaysWeather').append('<p>Lever du soleil : '+ p.city_info['sunrise']+' / Coucher de soleil : '+ p.city_info['sunset'] +'</p>');
+                $('.todaysWeather').append('<p>Lever du soleil : '+ data.city_info['sunrise']+' / Coucher de soleil : '+ data.city_info['sunset'] +'</p>');
                 // Température
-                $('.todaysWeather').append('<p>Température : ' + p.current_condition['tmp'] + '°C</p>');
+                $('.todaysWeather').append('<p>Température : ' + data.current_condition['tmp'] + '°C</p>');
+                // Humidité
+                $('.todaysWeather').append('<p>Humidité : '+ data.current_condition['humidity'] + ' %</p>');
+                // Vent et direction
+                $('.todaysWeather').append('<p>Vent : ' + data.current_condition['wnd_spd'] + ' km/h, direction ' + data.current_condition['wnd_dir'] + '</p>');
+                // Pression barométrique
+                $('.todaysWeather').append('<p>Pression barométrique : ' + data.current_condition['pressure'] + ' hPa</p>');
+
+                // Prévisions des prochains jours
+                $('.todaysWeather').after('<div class="forecast"></div>');
+
+                // On crée une boucle pour chaque jour prévisionnel
+                for (let i=0;i<4; i++){
+                    // Création d'une div parent
+                    $('.forecast').append('<div class="day'+(i+1)+'"></div>');
+                    // Date
+                    $('.day'+(i+1)).append('<h3>' + data["fcst_day_"+(i+1)]['day_long'] + ' ' + data["fcst_day_"+(i+1)]['date'] + '</h3>');
+                    // Conditions prévisionnelles avec image
+                    $('.day'+(i+1)).append('<p>'+ data["fcst_day_"+(i+1)]['condition'] + '<img src='+data["fcst_day_"+(i+1)]["icon"]+'></img></p>');
+                    // Températures minimum et maximum
+                    $('.day'+(i+1)).append('<p>Températures : de '+ data["fcst_day_"+(i+1)]['tmin'] + '°C à '+data["fcst_day_"+(i+1)]['tmax']+'°C</p>');
+                }
+
+                $('.forecast').children().css({
+                    'border': '1px solid black',
+                    'padding': '20px',
+                    'width': '100%'
+                });
             }
         });
     }

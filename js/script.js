@@ -101,6 +101,12 @@ $('button').click(function(){
                 });
             }, error : function(){
                 $('button').after('<p class="red">Erreur lors de la récupération des données</p>');
+            },
+            beforeSend: function(){
+                setOverlay();
+            },
+            complete: function(){
+                removeOverlay();
             }
         });
     }
